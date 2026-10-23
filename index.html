@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ms">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#071628">
+  <meta name="description" content="Reactoria: permainan pembelajaran 3D Sains Tingkatan 5 Bab 4 Kadar Tindak Balas">
+  <title>REACTORIA | Open-World RPG 3D — Kadar Tindak Balas</title>
+  <link rel="stylesheet" href="./style.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.186.0/build/three.module.js"
+      }
+    }
+  </script>
+</head>
+<body>
+  <canvas id="world" aria-label="Peta dunia permainan Reactoria tiga dimensi"></canvas>
+  <div class="vignette" aria-hidden="true"></div>
+  <div id="loadError" class="error-banner" hidden>Grafik 3D gagal dimuatkan. Pastikan sambungan internet aktif dan buka permainan melalui GitHub Pages atau pelayan web.</div>
+
+  <header id="hud" class="hud hidden">
+    <div class="brand"><div class="brand-icon">✦</div><div><strong>REACTORIA</strong><small>THE RATE OF REACTION REALM</small></div></div>
+    <div class="topstats">
+      <div class="stat"><small>TAHAP</small><b id="level">1</b></div>
+      <div class="stat"><small>XP</small><b id="xp">0</b></div>
+      <div class="stat"><small>MISI</small><b id="missions">0/5</b></div>
+    </div>
+    <button id="soundBtn" class="circle-btn" aria-label="Hidupkan atau matikan bunyi" title="Bunyi">♫</button>
+    <button id="helpBtn" class="circle-btn" aria-label="Lihat panduan" title="Panduan">?</button>
+  </header>
+
+  <aside id="questPanel" class="quest-panel glass hidden">
+    <div class="eyebrow">JURNAL PENGEMBARA</div>
+    <h2>Kristal Pengetahuan</h2>
+    <div class="progress-track"><span id="progressBar"></span></div>
+    <div id="questList"></div>
+    <p class="quest-hint">Terokai dunia dan hampiri suar cahaya untuk memulakan misi.</p>
+  </aside>
+
+  <aside id="minimapPanel" class="minimap-panel glass hidden">
+    <div class="minimap-label">PETA REACTORIA <span>UTARA ↑</span></div>
+    <canvas id="minimap" width="230" height="230" aria-label="Peta mini lokasi pemain dan misi"></canvas>
+    <div class="legend">● Anda &nbsp;&nbsp; ◇ Misi &nbsp;&nbsp; ★ Final</div>
+  </aside>
+
+  <div id="locationBanner" class="location-banner hidden">DATARAN ASAL</div>
+  <div id="interaction" class="interact glass hidden"><span class="key">E</span><div><b id="interactionTitle">Mulakan misi</b><small id="interactionDistance">Berhampiran</small></div><button id="interactBtn" class="small-primary">INTERAKSI</button></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <div id="controlsHint" class="controls-hint glass hidden"><b>W A S D</b> / <b>↑ ← ↓ →</b> Bergerak &nbsp; • &nbsp; <b>E</b> Interaksi &nbsp; • &nbsp; <b>Q / R</b> Putar kamera</div>
+  <div id="mobileControls" class="mobile-controls hidden" aria-label="Kawalan skrin sentuh">
+    <div class="dpad"><button data-move="forward" class="up" aria-label="Ke hadapan">▲</button><button data-move="left" class="left" aria-label="Ke kiri">◀</button><button data-move="back" class="down" aria-label="Ke belakang">▼</button><button data-move="right" class="right" aria-label="Ke kanan">▶</button></div>
+    <button id="mobileInteract" class="mobile-action">E<br><small>INTERAKSI</small></button>
+  </div>
+
+  <section id="startScreen" class="start-screen">
+    <div class="start-orb" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="core">⚛</div></div>
+    <div class="start-content">
+      <div class="eyebrow welcome">SAINS TINGKATAN 5 · BAB 4</div>
+      <h1>REACT<span>ORIA</span></h1>
+      <div class="start-subtitle">THE RATE OF REACTION REALM</div>
+      <p>Pengembaraan <strong>Open-World RPG 3D</strong> meneroka misteri kadar tindak balas. Jelajah lima kawasan, jalankan simulasi sains, lengkapkan misi dan aktifkan Reaktor Ilmu.</p>
+      <div class="start-pills"><span>✦ 5 Zon Sains</span><span>◆ Kuiz & Eksperimen Maya</span><span>★ XP & Lencana</span></div>
+      <button id="startBtn" class="primary-btn"><span>MULAKAN PENGEMBARAAN</span><span>→</span></button>
+      <p class="tiny">Progres disimpan pada pelayar peranti ini. Memerlukan internet untuk memuatkan grafik 3D.</p>
+    </div>
+    <div class="start-bottom">BELAJAR · TEROKA · EKSPERIMEN · KUASAI</div>
+  </section>
+
+  <div id="modalBackdrop" class="modal-backdrop hidden" role="presentation">
+    <section id="missionModal" class="mission-modal glass" role="dialog" aria-modal="true" aria-labelledby="modalTitle" tabindex="-1">
+      <button id="closeModal" class="close-modal" aria-label="Tutup paparan misi">×</button>
+      <div id="modalContent"></div>
+    </section>
+  </div>
+
+  <template id="bannerTemplate"></template>
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
