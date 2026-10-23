@@ -35,7 +35,7 @@
     <div class="eyebrow">JURNAL PENGEMBARA</div>
     <h2>Kristal Pengetahuan</h2>
     <div class="progress-track"><span id="progressBar"></span></div>
-    <div id="questList"></div>
+    <div id="questList"></div><div id="recordPanel" style="margin-top:18px;padding-top:14px;border-top:1px solid #426079"><strong>REKOD MURID</strong><p id="studentSummary" style="font-size:12px;overflow-wrap:anywhere">Belum didaftarkan</p><button id="submitResultBtn" type="button" style="background:#43dbe6;color:#06202d;border:0;border-radius:9px;padding:12px;cursor:pointer;font-weight:bold;width:100%">HANTAR KEPUTUSAN</button><p id="recordStatus" role="status" aria-live="polite" style="font-size:12px;overflow-wrap:anywhere"></p></div>
     <p class="quest-hint">Terokai dunia dan hampiri suar cahaya untuk memulakan misi.</p>
   </aside>
 
@@ -63,7 +63,14 @@
       <div class="start-subtitle">THE RATE OF REACTION REALM</div>
       <p>Pengembaraan <strong>Open-World RPG 3D</strong> meneroka misteri kadar tindak balas. Jelajah lima kawasan, jalankan simulasi sains, lengkapkan misi dan aktifkan Reaktor Ilmu.</p>
       <div class="start-pills"><span>✦ 5 Zon Sains</span><span>◆ Kuiz & Eksperimen Maya</span><span>★ XP & Lencana</span></div>
-      <button id="startBtn" class="primary-btn"><span>MULAKAN PENGEMBARAAN</span><span>→</span></button>
+      <div class="student-registration" style="display:grid;gap:10px;max-width:420px;margin:16px auto;text-align:left">
+<label for="studentName">Nama penuh murid</label>
+<input id="studentName" required maxlength="100" autocomplete="name" placeholder="Nama penuh" style="padding:13px;border-radius:10px;border:1px solid #45d6e9;background:#081b31;color:white">
+<label for="studentClass">Kelas</label>
+<input id="studentClass" required maxlength="50" placeholder="Contoh: 5 Alpha" style="padding:13px;border-radius:10px;border:1px solid #45d6e9;background:#081b31;color:white">
+<p style="font-size:12px;margin:0;color:#c5e7f3">Nama, kelas, topik dan markah akan dihantar apabila murid menekan Hantar Keputusan. Jangan masukkan nombor kad pengenalan.</p>
+</div>
+<button id="startBtn" class="primary-btn"><span>MULAKAN PENGEMBARAAN</span><span>→</span></button>
       <p class="tiny">Progres disimpan pada pelayar peranti ini. Memerlukan internet untuk memuatkan grafik 3D.</p>
     </div>
     <div class="start-bottom">BELAJAR · TEROKA · EKSPERIMEN · KUASAI</div>
