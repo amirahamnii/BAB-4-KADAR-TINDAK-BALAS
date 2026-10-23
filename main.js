@@ -28,6 +28,37 @@ const limbs=[new THREE.Group(),new THREE.Group(),new THREE.Group(),new THREE.Gro
 limbs.forEach((g,i)=>{g.position.set(i%2? .43:-.43,i<2?1.88:1.06,0);if(i>1)g.position.x=(i%2?.18:-.18);student.add(g);
 part(new THREE.CapsuleGeometry(i<2?.12:.15,i<2?.48:.57,5,10),i<2?white:navy,0,-.36,0,g);
 if(i>1)part(new THREE.BoxGeometry(.29,.14,.43),navy,0,-.82,-.12,g)});
+// Watak pelajar 3D: perincian ekspresi, uniform sekolah dan robot teman
+const eyeWhite=mat(0xffffff),iris=mat(0x152849),mouthMat=mat(0x9f6471),skinDetail=mat(0xe9b58d);
+for(const x of [-.13,.13]) {
+  part(new THREE.SphereGeometry(.067,12,10),eyeWhite,x,2.31,-.307);
+  part(new THREE.SphereGeometry(.035,10,9),iris,x,2.31,-.359);
+  part(new THREE.SphereGeometry(.012,8,8),eyeWhite,x-.011,2.327,-.387);
+  part(new THREE.SphereGeometry(.072,10,8),skinDetail,x*1.5,2.18,-.29);
+}
+const smile=part(new THREE.TorusGeometry(.085,.013,6,20,Math.PI),mouthMat,0,2.155,-.335);
+smile.rotation.z=Math.PI;
+const collar=mat(0x42eaff,0x0088cc);
+for (const x of [-.16,.16]) {
+  const lapel=part(new THREE.BoxGeometry(.14,.21,.04),collar,x,1.84,-.293);
+  lapel.rotation.z=x>0?-.38:.38;
+}
+part(new THREE.BoxGeometry(.14,.17,.05),mat(0xffd36a,0xb77800),0,1.59,-.352);
+for(const x of [-.15,.15]) part(new THREE.SphereGeometry(.075,10,8),mat(0x23456b),x,2.07,.07);
+const hairTuft=part(new THREE.ConeGeometry(.14,.27,9),hair,-.2,2.69,-.06);hairTuft.rotation.z=-.5;
+const backpackHalo=new THREE.Mesh(new THREE.TorusGeometry(.28,.03,8,24),glow);
+backpackHalo.position.set(0,1.53,.47);student.add(backpackHalo);
+const avatarShadow=new THREE.Mesh(new THREE.CircleGeometry(.52,32),new THREE.MeshBasicMaterial({color:0x00ddff,transparent:true,opacity:.18,depthWrite:false}));
+avatarShadow.rotation.x=-Math.PI/2;avatarShadow.position.y=.07;player.add(avatarShadow);
+const bot=new THREE.Group();scene.add(bot);
+const botBody=new THREE.Mesh(new THREE.SphereGeometry(.38,16,12),new THREE.MeshStandardMaterial({color:0xebf9ff,metalness:.48,roughness:.18,emissive:0x12556b,emissiveIntensity:.3}));bot.add(botBody);
+const botFace=new THREE.Mesh(new THREE.BoxGeometry(.49,.25,.10),new THREE.MeshStandardMaterial({color:0x062a4b,emissive:0x006799,emissiveIntensity:.48}));botFace.position.z=-.29;bot.add(botFace);
+for(const x of [-.11,.11]) {
+  const led=new THREE.Mesh(new THREE.SphereGeometry(.042,10,9),new THREE.MeshBasicMaterial({color:0x72fff1}));led.position.set(x,.025,-.345);bot.add(led);
+}
+const botRing=new THREE.Mesh(new THREE.TorusGeometry(.5,.024,8,36),glow);botRing.rotation.x=.5;bot.add(botRing);
+player.userData.bot=bot;
+
 player.userData={student,limbs};scene.add(player);
 const neon=new THREE.MeshStandardMaterial({color:0x19bce9,emissive:0x0aabff,emissiveIntensity:1.6,metalness:.6});
 for(let i=0;i<5;i++){let z=zones[i],len=Math.hypot(z.x,z.z),a=Math.atan2(z.x,z.z);
@@ -48,7 +79,8 @@ function closeMission(){modal=false;$('modalBackdrop').classList.add('hidden')}
 $('closeModal').onclick=closeMission;$('modalBackdrop').addEventListener('click',e=>{if(e.target===$('modalBackdrop'))closeMission()});$('startBtn').onclick=()=>{if(!renderer)return;$('startScreen').classList.add('hidden');['hud','questPanel','minimapPanel','controlsHint','mobileControls'].forEach(id=>$(id).classList.remove('hidden'));active=true};$('interactBtn').onclick=()=>openMission(near);$('mobileInteract').onclick=()=>openMission(near);$('helpBtn').onclick=()=>{modal=true;$('modalBackdrop').classList.remove('hidden');$('modalContent').innerHTML='<div class="mission-header"><h2>Panduan Pengembara</h2><p>Gunakan W A S D atau anak panah untuk bergerak. Tekan Q/R untuk memutar kamera. Dekati kristal dan tekan E untuk memulakan misi. Pada telefon, gunakan butang arah dan INTERAKSI. Jawab semua lima misi untuk mendapat 500 XP.</p></div><button class="accent-btn" id="okHelp">Faham</button>';$('okHelp').onclick=closeMission};$('soundBtn').onclick=()=>{let b=$('soundBtn');b.textContent=b.textContent==='♫'?'♪̸':'♫'};
 addEventListener('keydown',e=>{if(e.key==='Escape'&&modal)closeMission();if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key))e.preventDefault();keys.add(e.key.toLowerCase());if(e.key.toLowerCase()==='e'&&active&&!modal)openMission(near)});addEventListener('keyup',e=>keys.delete(e.key.toLowerCase()));document.querySelectorAll('[data-move]').forEach(b=>{let k={forward:'w',back:'s',left:'a',right:'d'}[b.dataset.move];b.addEventListener('pointerdown',e=>{e.preventDefault();keys.add(k);b.setPointerCapture(e.pointerId)});for(let ev of ['pointerup','pointercancel','lostpointercapture'])b.addEventListener(ev,()=>keys.delete(k))});addEventListener('resize',()=>{if(renderer){camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)}});
 function map(){let c=$('minimap'),ctx=c.getContext('2d'),w=c.width,h=c.height;ctx.clearRect(0,0,w,h);ctx.fillStyle='#082734';ctx.fillRect(0,0,w,h);ctx.strokeStyle='#36717a';for(let n=20;n<w;n+=30){ctx.beginPath();ctx.moveTo(n,0);ctx.lineTo(n,h);ctx.moveTo(0,n);ctx.lineTo(w,n);ctx.stroke()}let pos=(x,z)=>[w/2+x*3.1,h/2+z*3.1];zones.forEach((z,i)=>{let [x,y]=pos(z.x,z.z);ctx.fillStyle=completed.includes(i)?'#85f6ac':'#f8cc79';ctx.beginPath();ctx.arc(x,y,6,0,7);ctx.fill()});let [x,y]=pos(player.position.x,player.position.z);ctx.fillStyle='#5ce9ff';ctx.beginPath();ctx.arc(x,y,6,0,7);ctx.fill()}
-function frame(){requestAnimationFrame(frame);if(!renderer)return;let dt=Math.min(clock.getDelta(),.05);if(active&&!modal){let dx=0,dz=0;if(keys.has('w')||keys.has('arrowup'))dz-=1;if(keys.has('s')||keys.has('arrowdown'))dz+=1;if(keys.has('a')||keys.has('arrowleft'))dx-=1;if(keys.has('d')||keys.has('arrowright'))dx+=1;if(keys.has('q'))angle+=dt;if(keys.has('r'))angle-=dt;let mag=Math.hypot(dx,dz);if(mag){dx/=mag;dz/=mag;player.position.x=THREE.MathUtils.clamp(player.position.x+dx*dt*8,-58,58);player.position.z=THREE.MathUtils.clamp(player.position.z+dz*dt*8,-58,58);player.rotation.y=Math.atan2(-dx,-dz)}if(player.userData.limbs){let t=performance.now()*.009,v=mag?1:0;player.userData.limbs.forEach((g,i)=>g.rotation.x=Math.sin(t+(i%2?Math.PI:0))*(i<2?.35:.55)*v);player.userData.student.position.y=Math.abs(Math.sin(t))*.08*v}near=-1;let dmin=5;zones.forEach((z,i)=>{let d=Math.hypot(player.position.x-z.x,player.position.z-z.z);if(d<dmin){dmin=d;near=i}});$('interaction').classList.toggle('hidden',near<0);if(near>=0){$('interactionTitle').textContent=zones[near].name;$('interactionDistance').textContent='Tekan E untuk berinteraksi'}$('locationBanner').classList.toggle('hidden',near<0);if(near>=0)$('locationBanner').textContent=zones[near].name;map()}
+function frame(){requestAnimationFrame(frame);if(!renderer)return;let dt=Math.min(clock.getDelta(),.05);if(active&&!modal){let dx=0,dz=0;if(keys.has('w')||keys.has('arrowup'))dz-=1;if(keys.has('s')||keys.has('arrowdown'))dz+=1;if(keys.has('a')||keys.has('arrowleft'))dx-=1;if(keys.has('d')||keys.has('arrowright'))dx+=1;if(keys.has('q'))angle+=dt;if(keys.has('r'))angle-=dt;let mag=Math.hypot(dx,dz);if(mag){dx/=mag;dz/=mag;player.position.x=THREE.MathUtils.clamp(player.position.x+dx*dt*8,-58,58);player.position.z=THREE.MathUtils.clamp(player.position.z+dz*dt*8,-58,58);player.rotation.y=Math.atan2(-dx,-dz)}if(player.userData.limbs){let t=performance.now()*.009,v=mag?1:0;player.userData.limbs.forEach((g,i)=>g.rotation.x=Math.sin(t+(i%2?Math.PI:0))*(i<2?.35:.55)*v);player.userData.student.position.y=Math.abs(Math.sin(t))*.08*v;player.userData.student.rotation.z=Math.sin(t*.5)*.025*v;player.userData.student.rotation.x=-.045*v}near=-1;let dmin=5;zones.forEach((z,i)=>{let d=Math.hypot(player.position.x-z.x,player.position.z-z.z);if(d<dmin){dmin=d;near=i}});$('interaction').classList.toggle('hidden',near<0);if(near>=0){$('interactionTitle').textContent=zones[near].name;$('interactionDistance').textContent='Tekan E untuk berinteraksi'}$('locationBanner').classList.toggle('hidden',near<0);if(near>=0)$('locationBanner').textContent=zones[near].name;map()}
+if(player&&player.userData.bot){let t=performance.now()*.0015;player.userData.bot.position.set(player.position.x+1.35+Math.cos(t)*.25,2.55+Math.sin(t*2)*.2,player.position.z+.75+Math.sin(t)*.25);player.userData.bot.rotation.y=t;}
 beacons.forEach((b,i)=>{b.rotation.y+=dt*.8;b.position.y=3.6+Math.sin(performance.now()/600+i)*.3});let target=new THREE.Vector3(player.position.x+Math.sin(angle)*13,13,player.position.z+Math.cos(angle)*13);camera.position.lerp(target,.07);camera.lookAt(player.position.x,1.1,player.position.z);renderer.render(scene,camera)}frame();
 
 // Bunyi sintesis ringkas tanpa fail audio luaran; aktif selepas interaksi pengguna.
